@@ -13,7 +13,7 @@ def contacts(request):
 
         print(f'name = {name}, phone = {phone}, message = {message}')
 
-        # Открываем файл для записи данных из формы обратной связи
+        # Открываем текстовый файл для записи данных из формы обратной связи
         with open('feedbacks.txt', 'a') as file:
             file.write(f'name = {name}, phone = {phone}, message = {message}\n')
 
