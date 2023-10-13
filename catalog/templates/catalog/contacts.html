@@ -69,6 +69,17 @@
         </div>
     </div>
 
+<div>
+    <ul class="list-group">
+        {% for contact in contacts %}
+        <li class="list-group-item">{{contact.name}}</li>
+        <li class="list-group-item">Email: {{contact.email}}</li>
+        <li class="list-group-item">Телефон: {{contact.phone}}</li>
+        <li class="list-group-item">Адрес: {{contact.address}}</li>
+        {% endfor %}
+    </ul>
+</div>
+
     <footer class="pt-4 my-md-5 pt-md-5 border-top">
         <div class="row">
             <div class="col-12 col-md">

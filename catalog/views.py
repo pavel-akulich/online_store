@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from catalog.models import Product
+from catalog.models import Product, Contact
 
 
 def home(request):
@@ -24,4 +24,7 @@ def contacts(request):
         with open('feedbacks.txt', 'a') as file:
             file.write(f'name = {name}, phone = {phone}, message = {message}\n')
 
-    return render(request, 'catalog/contacts.html')
+    # получаем контакты из админки для последующего вывода в шаблоне
+    contacts_for_support = Contact.objects.all()
+
+    return render(request, 'catalog/contacts.html', {'contacts': contacts_for_support})
