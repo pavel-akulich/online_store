@@ -1,7 +1,14 @@
 from django.shortcuts import render
 
+from catalog.models import Product
+
 
 def home(request):
+    # выборка последних 5 товаров и вывод их в консоль
+    latest_products = Product.objects.order_by('-created_at')[:5]
+    for product in latest_products:
+        print(f'Название продукта: {product.name}, стоимость: {product.price}')
+
     return render(request, 'catalog/home.html')
 
 
