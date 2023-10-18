@@ -1,26 +1,32 @@
+import codecs
+import json
+
 from django.core.management import BaseCommand
 
-from catalog.models import Category
+from catalog.models import Product, Category
 
 
 class Command(BaseCommand):
-    """Команда записи категорий в БД"""
+    """Команда для добавления нового товара из формы на странице магазина в каталог"""
 
     def handle(self, *args, **kwargs):
-        # добавляем категории
-        categories_list = [
-            {'name': 'Компьютерные мониторы'},
-            {'name': 'Компьютерные мышки'},
-            {'name': 'Компьютерные клавиатуры'},
-            {'name': 'Компьютерные принтеры'}
-        ]
+        with open('catalog/product_data.json', 'r', encoding='utf-8') as file:
+            data = json.load(file)
 
-        Category.objects.all().delete()
+            for item in data:
+                category_name = codecs.decode(item['category'], 'unicode_escape').encode('latin1').decode('utf-8')
 
-        categories_for_create = []
-        for category_item in categories_list:
-            categories_for_create.append(
-                Category(**category_item)
-            )
+                # Создаем экземпляр модели Category на основе имени категории
+                category, created = Category.objects.get_or_create(name=category_name)
 
-        Category.objects.bulk_create(categories_for_create)
+                product = Product(
+                    name=item['name'],
+                    description=item['description'],
+                    photo=item['photo'],
+                    category=category,
+                    price=item['price'],
+                    created_at=item['created_at'],
+                    modified_at=item['modified_at']
+                )
+
+                product.save()

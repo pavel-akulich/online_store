@@ -1,6 +1,10 @@
+import json
+import subprocess
+from datetime import datetime
+
 from django.shortcuts import render
 
-from catalog.models import Product, Contact
+from catalog.models import Product, Contact, Category
 
 
 def home(request):
@@ -41,3 +45,43 @@ def catalog_products(request):
         'title': 'Catalog of My Store',
     }
     return render(request, 'catalog/catalog_products.html', context)
+
+
+def create_product(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        description = request.POST.get('description')
+        category = request.POST.get('category')
+        price = request.POST.get('price')
+
+        # Получаем текущую дату и время
+        current_datetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+        # Создаем список, содержащий словарь с данными
+        product_data = [
+            {
+                'name': name,
+                'description': description,
+                'photo': '',
+                'category': category,
+                'price': price,
+                'created_at': current_datetime,
+                'modified_at': current_datetime
+            }
+        ]
+
+        with open('catalog/product_data.json', 'w', encoding='utf-8') as file:
+            json.dump(product_data, file)
+
+        # После сохранения данных выполняем команду fill с помощью subprocess
+        fill_command = 'python3 manage.py fill'
+        try:
+            subprocess.run(fill_command, shell=True, check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"Ошибка выполнения команды fill: {e}")
+
+    context = {
+        'object_list': Category.objects.all(),
+        'title': 'Create your product',
+    }
+    return render(request, 'catalog/create_product.html', context)
