@@ -1,0 +1,37 @@
+{% extends 'catalog/base.html' %}
+{% block content %}
+    <div class="col-lg-5 col-md-6 col-sm-12 mx-auto">
+        <div class="card mb-4 box-shadow">
+            <div class="card-header">
+                <h5 class="my-0 font-weight-normal">Заполните форму для добавления своего товара</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" action="" class="form-floating" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="{{ form.name.id_for_label }}">Наименование продукта</label><br/>
+                        {{ form.name }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ form.description.id_for_label }}">Описание продукта</label>
+                        {{ form.description }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ form.price.id_for_label }}">Цена продукта</label><br/>
+                        {{ form.price }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ form.category.id_for_label }}">Категория продукта</label><br/>
+                        {{ form.category }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ form.photo.id_for_label }}">Фото продукта</label><br/>
+                        {{ form.photo }}
+                    </div>
+                    <button type="submit" class="btn btn-lg btn-block btn-outline-dark">Добавить в каталог</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
