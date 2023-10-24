@@ -1,6 +1,10 @@
-
 {% extends 'catalog/base.html' %}
 {% block content %}
+    <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+        <h1 class="display-4">{{ title }}</h1>
+        <p class="lead">Здесь вы найдете различные статьи на интересные темы, связанные с техникой и IT
+            технологиями</p>
+    </div>
     <div class="col-12 mb-5">
         <a class="btn btn-outline-primary" href="{% url 'blog:create' %}">Добавить статью в блог</a>
     </div>
