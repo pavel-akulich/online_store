@@ -1,0 +1,17 @@
+{% extends 'catalog/base.html' %}
+{% block content %}
+    <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+        <h1 class="display-4">{{ title }}</h1>
+        <p class="lead">{{ title }} - это отличный вариант для покупки вашей техники</p>
+    </div>
+
+    <div class="row text-center">
+        {% for object in object_list %}
+            {% include 'catalog/includes/inc_product.html' %}
+        {% endfor %}
+    </div>
+
+    <div class="d-grid gap-2 mx-auto text-center">
+        <a class="p-1 btn btn-outline-primary" href="{% url 'catalog:catalog_products' %}">Посмотреть весь товар</a>
+    </div>
+{% endblock %}
