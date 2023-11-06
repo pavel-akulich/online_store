@@ -39,6 +39,24 @@ class Product(models.Model):
         ordering = ('name',)
 
 
+class Version(models.Model):
+    """Модель для версий продукта"""
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name="Продукт")
+    version_number = models.FloatField(verbose_name="Номер версии")
+    version_name = models.CharField(max_length=150, verbose_name="Название версии")
+
+    is_active = models.BooleanField(default=False, verbose_name='Признак активности версии')
+
+    def __str__(self):
+        """Строковое представление объекта"""
+        return f'{self.version_name} - {self.version_number}'
+
+    class Meta:
+        """Мета класс настройка для именования объектов"""
+        verbose_name = "Версия"
+        verbose_name_plural = "Версии"
+
+
 class Contact(models.Model):
     """Модель для контактов"""
     name = models.CharField(max_length=150, verbose_name='имя контакта')

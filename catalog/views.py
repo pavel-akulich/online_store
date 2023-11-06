@@ -1,8 +1,10 @@
+from django.forms import inlineformset_factory
 from django.http import HttpResponseRedirect
-from django.urls import reverse_lazy
-from django.views.generic import TemplateView, ListView, CreateView
+from django.urls import reverse_lazy, reverse
+from django.views.generic import TemplateView, ListView, CreateView, DetailView, UpdateView, DeleteView
 
-from catalog.models import Product, Contact
+from catalog.forms import ProductForm, VersionForm
+from catalog.models import Product, Contact, Version
 
 
 class HomeView(TemplateView):
@@ -47,9 +49,54 @@ class ProductListView(ListView):
 
 
 class ProductCreateView(CreateView):
+    model = Product
     extra_context = {
         'title': 'Create a Product'
     }
-    model = Product
-    fields = ('name', 'description', 'photo', 'category', 'price')
+    form_class = ProductForm
     success_url = reverse_lazy('catalog:catalog_products')
+
+
+class ProductDetailView(DetailView):
+    model = Product
+    extra_context = {
+        'title': 'View product details'
+    }
+
+
+class ProductUpdateView(UpdateView):
+    model = Product
+    form_class = ProductForm
+
+    extra_context = {
+        'title': 'Edit product',
+    }
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+
+        VersionFormset = inlineformset_factory(Product, Version, form=VersionForm, extra=1)
+        if self.request.method == 'POST':
+            context_data['formset'] = VersionFormset(self.request.POST, instance=self.object)
+        else:
+            context_data['formset'] = VersionFormset(instance=self.object)
+        return context_data
+
+    def form_valid(self, form):
+        formset = self.get_context_data()['formset']
+        self.object = form.save()
+        if formset.is_valid():
+            formset.instance = self.object
+            formset.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('catalog:view_product', args=[self.kwargs.get('pk')])
+
+
+class ProductDeleteView(DeleteView):
+    model = Product
+    success_url = reverse_lazy('catalog:catalog_products')
+    extra_context = {
+        'title': 'Delete article',
+    }

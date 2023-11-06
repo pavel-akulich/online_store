@@ -5,6 +5,19 @@
     </div>
 
     <div class="row text-center">
+
+        <div class="col-sm-3">
+            <div class="card-header">
+                <h5 class="my-0 font-weight-normal">Добавьте свой продукт</h5>
+            </div>
+            <div class="card-body">
+                Тут будет размещена информация о вашем товаре
+                <a class="p-2 btn btn-lg btn-outline-primary" href="{% url 'catalog:create_product' %}">Добавить
+                    продукт</a>
+
+            </div>
+        </div>
+
         {% for object in object_list %}
             {% include 'catalog/includes/inc_product.html' %}
         {% endfor %}

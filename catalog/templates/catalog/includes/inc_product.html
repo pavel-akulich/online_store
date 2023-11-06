@@ -12,8 +12,24 @@
                 <li><h6>Краткое описание:</h6>{{ object.description|truncatechars:100 }}</li>
                 <li><h6>Цена:</h6>{{ object.price }}</li>
                 <li><h6>{{ object.category }}</h6></li>
+                <li>
+                    {% if object.version_set.all %}
+                        <ul>
+                            {% for version in object.version_set.all %}
+                                {% if version.is_active %}
+                                    <h6>Доступные версии продукта:</h6>
+                                    <li>{{ version.version_name }} ({{ version.version_number }})</li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </li>
             </ul>
-            <button type="button" class="btn btn-lg btn-block btn-outline-success">Купить</button>
+            <div class="card-footer">
+                <button type="button" class="btn btn-lg btn-block btn-outline-success">Купить</button>
+                <a class="p-2 btn btn-lg btn-outline-primary"
+                   href="{% url 'catalog:view_product' object.pk %}">Посмотреть</a>
+            </div>
         </div>
     </div>
 </div>

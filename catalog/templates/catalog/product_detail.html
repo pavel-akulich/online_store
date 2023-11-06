@@ -1,0 +1,43 @@
+{% extends 'catalog/base.html' %}
+{% block content %}
+    <div class="col-12">
+        <div class="row">
+
+
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            Продукт "{{ object.name }}"
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div>
+                            <strong>Описание продукта:</strong><br/>
+                            {{ object.description }}
+                        </div>
+                        <div>
+                            <strong>Фото продукта:</strong><br/>
+                            {% if object.photo %}
+                                <img src="{{ object.photo.url }}" alt="{{ object.name }}" width="200">
+                            {% else %}
+                                <p>Изображение отсутствует</p>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <strong>Категория продукта:</strong><br/>
+                            {{ object.category }}
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <strong>Цена:</strong><br/>
+                        {{ object.price }}<br/>
+                        <hr>
+                        <a class="p-2 btn btn-lg btn-outline-primary" href="{% url 'catalog:edit_product' object.pk %}">Редактировать</a>
+                        <a class="btn btn-lg btn-outline-danger" href="{% url 'catalog:delete_product' object.pk %}">Удалить</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
