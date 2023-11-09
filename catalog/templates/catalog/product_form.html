@@ -1,51 +1,58 @@
 {% extends 'catalog/base.html' %}
 {% block content %}
-    <div class="container">
-        <form method="post" action="" class="form-floating" enctype="multipart/form-data">
-            <div class="row">
-                <div class="col-lg-5 col-md-6 col-sm-12">
+    {% if user.is_authenticated %}
+        <div class="container">
+            <form method="post" action="" class="form-floating" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-lg-5 col-md-6 col-sm-12">
 
-                    <div class="card mb-4 box-shadow">
-                        <div class="card-header">
-                            {% if object %}
-                                <h5 class="my-0 font-weight-normal">Заполните форму для редактирования товара</h5>
-                            {% else %}
-                                <h5 class="my-0 font-weight-normal">Заполните форму для добавления своего товара</h5>
-                            {% endif %}
-                        </div>
-                        <div class="card-body">
-                            {% csrf_token %}
-                            {{ form.as_p }}
-                            {% if object %}
-                                <button type="submit" class="btn btn-lg btn-block btn-outline-dark">Сохранить продукт
-                                </button>
-                            {% else %}
-                                <button type="submit" class="btn btn-lg btn-block btn-outline-dark">Добавить в каталог
-                                </button>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-5 col-md-6 col-sm-12">
-                    <div class="card mb-4 box-shadow">
-                        <div class="card-header">
-                            <h5>Версии продукта {{ object.name }} </h5>
-                        </div>
-                        <div class="card-body">
-                            {{ formset.management_form }}
-                            {% for form in formset.forms %}
-                                {{ form.as_p }}
-                                {% if forloop.revcounter0 != 0 %}
-                                    <hr>
-                                    <br/>
+                        <div class="card mb-4 box-shadow">
+                            <div class="card-header">
+                                {% if object %}
+                                    <h5 class="my-0 font-weight-normal">Заполните форму для редактирования товара</h5>
+                                {% else %}
+                                    <h5 class="my-0 font-weight-normal">Заполните форму для добавления своего
+                                        товара</h5>
                                 {% endif %}
-                            {% endfor %}
+                            </div>
+                            <div class="card-body">
+                                {% csrf_token %}
+                                {{ form.as_p }}
+                                {% if object %}
+                                    <button type="submit" class="btn btn-lg btn-block btn-outline-dark">Сохранить
+                                        продукт
+                                    </button>
+                                {% else %}
+                                    <button type="submit" class="btn btn-lg btn-block btn-outline-dark">Добавить в
+                                        каталог
+                                    </button>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
-                </div>
 
-            </div>
-        </form>
-    </div>
+                    <div class="col-lg-5 col-md-6 col-sm-12">
+                        <div class="card mb-4 box-shadow">
+                            <div class="card-header">
+                                <h5>Версии продукта {{ object.name }} </h5>
+                            </div>
+                            <div class="card-body">
+                                {{ formset.management_form }}
+                                {% for form in formset.forms %}
+                                    {{ form.as_p }}
+                                    {% if forloop.revcounter0 != 0 %}
+                                        <hr>
+                                        <br/>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    {% else %}
+        <h1>Этот раздел доступ только авторизованным пользователям</h1>
+    {% endif %}
 {% endblock %}

@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 
 NULLABLE = {'blank': True, 'null': True}
@@ -27,6 +28,8 @@ class Product(models.Model):
     price = models.DecimalField(verbose_name='Цена', max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     modified_at = models.DateTimeField(auto_now=True, verbose_name='Дата последнего изменения')
+
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, **NULLABLE, verbose_name='Продавец')
 
     def __str__(self):
         """Строковое представление объекта"""
