@@ -17,6 +17,16 @@
         <a class="p-2 btn btn-outline-primary" href="{% url 'catalog:catalog_products' %}">Каталог</a>
         <a class="p-2 btn btn-outline-primary" href="{% url 'blog:list' %}">Наш ТехноБлог</a>
     </nav>
+    <div class="ms-auto">
+        {% if user.is_authenticated %}
+            <a class="p-2 btn btn-outline-primary" href="{% url 'users:verification' %}">Подтвердить почту</a>
+            <a class="p-2 btn btn-outline-primary" href="{% url 'users:profile' %}">Профиль</a>
+            <a class="p-2 btn btn-outline-primary" href="{% url 'users:logout' %}">Выход</a>
+        {% else %}
+            <a class="p-2 btn btn-outline-primary" href="{% url 'users:login' %}">Вход</a>
+            <a class="p-2 btn btn-outline-primary" href="{% url 'users:register' %}">Регистрация</a>
+        {% endif %}
+    </div>
 </div>
 <div class="container">
 
