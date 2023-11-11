@@ -58,7 +58,7 @@
 
     <div>
         <ul class="list-group">
-            {% for contact in contacts %}
+            {% for contact in object_list %}
                 <li class="list-group-item">{{ contact.name }}</li>
                 <li class="list-group-item">Email: {{ contact.email }}</li>
                 <li class="list-group-item">Телефон: {{ contact.phone }}</li>
