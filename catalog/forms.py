@@ -25,7 +25,7 @@ class ProductForm(forms.ModelForm):
 
     class Meta:
         model = Product
-        fields = ('name', 'description', 'photo', 'category', 'price',)
+        fields = ('name', 'description', 'photo', 'category', 'price', 'is_published', )
         widgets = {
             'photo': forms.ClearableFileInput(attrs={'class': 'form-control'}),
             'category': forms.Select(attrs={'class': 'form-control'}),

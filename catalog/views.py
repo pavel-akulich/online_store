@@ -1,5 +1,6 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import inlineformset_factory
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView, ListView, CreateView, DetailView, UpdateView, DeleteView
 
@@ -19,7 +20,7 @@ class HomeView(TemplateView):
         return context_data
 
 
-class ContactPageView(TemplateView):
+class ContactPageView(LoginRequiredMixin, TemplateView):
     template_name = 'catalog/contacts.html'
     extra_context = {
         'title': 'Contacts My Store'
@@ -41,14 +42,14 @@ class ContactPageView(TemplateView):
         return context_data
 
 
-class ProductListView(ListView):
+class ProductListView(LoginRequiredMixin, ListView):
     model = Product
     extra_context = {
         'title': 'Catalog of My Store'
     }
 
 
-class ProductCreateView(CreateView):
+class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     extra_context = {
         'title': 'Create a Product'
@@ -64,20 +65,27 @@ class ProductCreateView(CreateView):
         return super().form_valid(form)
 
 
-class ProductDetailView(DetailView):
+class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
     extra_context = {
         'title': 'View product details'
     }
 
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
-
     extra_context = {
         'title': 'Edit product',
     }
+
+    def get_object(self, queryset=None):
+        self.object = super().get_object(queryset)
+        if not (self.object.owner == self.request.user or
+                self.request.user.is_superuser or
+                self.request.user.groups.filter(name='moderator')):
+            raise Http404('У вас нет доступа к этой странице')
+        return self.object
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -101,9 +109,15 @@ class ProductUpdateView(UpdateView):
         return reverse('catalog:view_product', args=[self.kwargs.get('pk')])
 
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     success_url = reverse_lazy('catalog:catalog_products')
     extra_context = {
-        'title': 'Delete article',
+        'title': 'Delete product',
     }
+
+    def get_object(self, queryset=None):
+        self.object = super().get_object(queryset)
+        if self.object.owner != self.request.user and not self.request.user.is_superuser:
+            raise Http404('У вас нет доступа к этой странице')
+        return self.object

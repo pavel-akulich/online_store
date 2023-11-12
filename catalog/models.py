@@ -31,12 +31,20 @@ class Product(models.Model):
 
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, **NULLABLE, verbose_name='Продавец')
 
+    is_published = models.BooleanField(default=False, verbose_name='признак публикации')
+
     def __str__(self):
         """Строковое представление объекта"""
         return f'{self.name} из категории {self.category}'
 
     class Meta:
-        """Мета класс настройка для именования объектов"""
+        """Мета класс настройка для объектов"""
+        permissions = [
+            (
+                'set_published',
+                'Can publish posts'
+            )
+        ]
         verbose_name = 'Продукт'
         verbose_name_plural = 'Продукты'
         ordering = ('name',)
@@ -55,7 +63,7 @@ class Version(models.Model):
         return f'{self.version_name} - {self.version_number}'
 
     class Meta:
-        """Мета класс настройка для именования объектов"""
+        """Мета класс настройка для объектов"""
         verbose_name = "Версия"
         verbose_name_plural = "Версии"
 
@@ -72,7 +80,7 @@ class Contact(models.Model):
         return f'Имя:{self.name}, email:{self.email}, телефон:{self.phone}'
 
     class Meta:
-        """Мета класс настройка для именования объектов"""
+        """Мета класс настройка для объектов"""
         verbose_name = "Контакт"
         verbose_name_plural = "Контакты"
         ordering = ('name',)

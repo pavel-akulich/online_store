@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 from pytils.translit import slugify
@@ -5,8 +6,9 @@ from pytils.translit import slugify
 from blog.models import Blog
 
 
-class BlogCreateView(CreateView):
+class BlogCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Blog
+    permission_required = 'blog.add_blog'
     fields = ('title', 'content', 'preview')
     success_url = reverse_lazy('blog:list')
     extra_context = {
@@ -22,7 +24,7 @@ class BlogCreateView(CreateView):
         return super().form_valid(form)
 
 
-class BlogListView(ListView):
+class BlogListView(LoginRequiredMixin, ListView):
     model = Blog
     extra_context = {
         'title': 'My Store TechBlog'
@@ -34,7 +36,7 @@ class BlogListView(ListView):
         return queryset
 
 
-class BlogDetailView(DetailView):
+class BlogDetailView(LoginRequiredMixin, DetailView):
     model = Blog
     extra_context = {
         'title': 'View blog article'
@@ -47,8 +49,9 @@ class BlogDetailView(DetailView):
         return self.object
 
 
-class BlogUpdateView(UpdateView):
+class BlogUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Blog
+    permission_required = 'blog.change_blog'
     fields = ('title', 'content', 'preview')
     success_url = reverse_lazy('blog:list')
     extra_context = {
@@ -67,8 +70,9 @@ class BlogUpdateView(UpdateView):
         return reverse('blog:view', args=[self.kwargs.get('pk')])
 
 
-class BlogDeleteView(DeleteView):
+class BlogDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Blog
+    permission_required = 'blog.delete_blog'
     success_url = reverse_lazy('blog:list')
     extra_context = {
         'title': 'Delete article',

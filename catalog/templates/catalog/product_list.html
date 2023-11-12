@@ -12,20 +12,16 @@
                     <h5 class="my-0 font-weight-normal">Добавление товара</h5>
                 </div>
                 <div class="card-body">
-                    {% if user.is_authenticated %}
-                        <ul class="list-unstyled mt-3 mb-4 text-start m-3">
-                            <li><h6>Здесь вы можете</h6></li>
-                            <li><h6>Разместить свой товар</h6></li>
-                            <li><h6>Возможно добавление</h6></li>
-                            <li><h6>Описания, фото и цены</h6></li>
-                        </ul>
-                        <div class="card-footer">
-                            <a class="p-2 btn btn-lg btn-outline-primary"
-                               href="{% url 'catalog:create_product' %}">Добавить товар</a>
-                        </div>
-                    {% else %}
-                        <h6>Функция доступа только авторизованным пользователям</h6>
-                    {% endif %}
+                    <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+                        <li><h6>Здесь вы можете</h6></li>
+                        <li><h6>Разместить свой товар</h6></li>
+                        <li><h6>Возможно добавление</h6></li>
+                        <li><h6>Описания, фото и цены</h6></li>
+                    </ul>
+                    <div class="card-footer">
+                        <a class="p-2 btn btn-lg btn-outline-primary"
+                           href="{% url 'catalog:create_product' %}">Добавить товар</a>
+                    </div>
                 </div>
             </div>
         </div>

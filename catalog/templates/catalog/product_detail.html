@@ -32,12 +32,24 @@
                     <div class="card-footer">
                         <strong>Цена:</strong><br/>
                         {{ object.price }}<br/>
+                        <p>
+                        <h6>Продавец: {{ object.owner|default:'Неизвестен' }}</h6>
+                        <p>
+                            {% if object.is_published == True %}
+                                <h6>Опубликован</h6>
+                            {% else %}
+                                <h6>Не публикован(на модерации)</h6>
+                            {% endif %}
                         <hr>
                         {% if user.is_authenticated %}
-                            <a class="p-2 btn btn-lg btn-outline-primary"
-                               href="{% url 'catalog:edit_product' object.pk %}">Редактировать</a>
-                            <a class="btn btn-lg btn-outline-danger"
-                               href="{% url 'catalog:delete_product' object.pk %}">Удалить</a>
+                            {% if perms.catalog.change_product or user == object.owner %}
+                                <a class="p-2 btn btn-lg btn-outline-primary"
+                                   href="{% url 'catalog:edit_product' object.pk %}">Редактировать</a>
+                            {% endif %}
+                            {% if user == object.owner or user.is_superuser %}
+                                <a class="btn btn-lg btn-outline-danger"
+                                   href="{% url 'catalog:delete_product' object.pk %}">Удалить</a>
+                            {% endif %}
                         {% endif %}
                     </div>
                 </div>
