@@ -5,7 +5,8 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView, ListView, CreateView, DetailView, UpdateView, DeleteView
 
 from catalog.forms import ProductForm, VersionForm
-from catalog.models import Product, Contact, Version
+from catalog.models import Product, Contact, Version, Category
+from catalog.services import cache_categories
 
 
 class HomeView(TemplateView):
@@ -17,6 +18,18 @@ class HomeView(TemplateView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         context_data['object_list'] = Product.objects.order_by('-created_at')[:4]
+        return context_data
+
+
+class CategoryListView(LoginRequiredMixin, ListView):
+    model = Category
+    extra_context = {
+        'title': 'Categories our products',
+    }
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data['category'] = cache_categories()
         return context_data
 
 
